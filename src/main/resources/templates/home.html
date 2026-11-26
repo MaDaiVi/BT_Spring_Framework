@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trang chủ - Electronic Store</title>
+<link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+	<header class="shop-header">
+		<div class="shop-logo">Electronic Store</div>
+
+		<div class="shop-user">
+			<span th:text="${account.fullName}"></span> <span class="role-badge"
+				th:text="${account.role}"
+				th:classappend="${isAdmin} ? ' admin-role' : ' user-role'"> </span>
+
+			<a th:href="@{/logout}" class="logout-btn">Đăng xuất</a>
+		</div>
+	</header>
+
+	<main class="shop-container">
+
+		<section class="welcome-section">
+			<h1>Chào mừng đến với Electronic Store!</h1>
+
+			<p th:if="${isAdmin}">Xin chào Admin! Bạn có thể quản lý danh
+				sách sản phẩm tại đây.</p>
+
+			<p th:unless="${isAdmin}">Khám phá các linh kiện điện tử và chọn
+				sản phẩm yêu thích nhé!</p>
+		</section>
+
+		<section class="product-section">
+
+			<div class="section-heading">
+				<h2>Sản phẩm nổi bật</h2>
+
+				<button th:if="${isAdmin}" class="btn-add">+ Thêm sản phẩm
+				</button>
+
+				<a th:unless="${isAdmin}" href="#cart-section" class="btn-cart">
+					Giỏ hàng (2) </a>
+			</div>
+
+			<div class="product-grid">
+
+				<div class="product-card" th:each="product : ${products}">
+
+					<img th:src="${product.image}" th:alt="${product.name}">
+
+					<div class="product-info">
+
+						<h3 th:text="${product.name}"></h3>
+
+						<p class="product-price"
+							th:text="${#numbers.formatInteger(product.price, 0, 'POINT')} + ' VNĐ'">
+						</p>
+
+						<p class="product-stock">
+							Còn hàng: <span th:text="${product.stock}"></span>
+						</p>
+
+						<div class="product-actions">
+
+							<button th:if="${isAdmin}" class="btn-edit">Sửa</button>
+
+							<button th:if="${isAdmin}" class="btn-delete">Xóa</button>
+
+							<button th:unless="${isAdmin}" class="btn-cart">Thêm vào
+								giỏ</button>
+
+						</div>
+
+					</div>
+
+				</div>
+
+			</div>
+
+		</section>
+		<!-- Khu vực giỏ hàng: chỉ USER mới nhìn thấy -->
+		<section class="cart-section" id="cart-section" th:unless="${isAdmin}">
+
+			<div class="section-heading">
+				<h2>Giỏ hàng của tôi</h2>
+				<span>2 sản phẩm</span>
+			</div>
+
+			<div class="cart-box">
+
+				<div class="cart-item">
+					<img src="https://placehold.co/100x100?text=Arduino"
+						alt="Arduino Uno R3">
+
+					<div class="cart-item-info">
+						<h3>Arduino Uno R3</h3>
+						<p>150.000 VNĐ</p>
+						<span>Số lượng: 1</span>
+					</div>
+
+					<button class="btn-delete">Xóa</button>
+				</div>
+
+				<div class="cart-item">
+					<img src="https://placehold.co/100x100?text=ESP32" alt="ESP32">
+
+					<div class="cart-item-info">
+						<h3>ESP32 DevKit V1</h3>
+						<p>120.000 VNĐ</p>
+						<span>Số lượng: 1</span>
+					</div>
+
+					<button class="btn-delete">Xóa</button>
+				</div>
+
+				<div class="cart-total">
+					<h3>Tổng tiền: 270.000 VNĐ</h3>
+					<button class="btn-checkout">Tiến hành thanh toán</button>
+				</div>
+
+			</div>
+
+		</section>
+	</main>
+
+</body>
+</html>
